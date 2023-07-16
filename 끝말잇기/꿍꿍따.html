@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>쿵쿵따</title>
+</head>
+
+<body>
+    <div><span id="order">1</span>번째 참가자</div>
+    <div>제시어 : <span id="word"></span></div>
+    <input type="text">
+    <button>입력</button>
+    <script>
+        const number = Number(prompt('몇명이 참가하나요?'));
+        const $input = document.querySelector('input');
+        const $btn = document.querySelector('button');
+        const $word = document.querySelector('#word');
+        const $order = document.querySelector('#order');
+        let word; //제시어
+        let nextWord; // 현재 단어
+        let tmp // 임시변수
+
+        if (!number) { // 참가자가 없는 경우
+            $btn.disabled = true;
+
+        }
+        const onbtnClick = () => {
+            // 참가자가 있는 경우1
+            if (nextWord.length ===3 && (!word || word[word.length-1] === nextWord[0])) { // 제시어가 없음 또느 입력한 단어가 올바른지 확인
+                // 비어있다.
+                word = nextWord;
+                $word.textContent = word;
+                const order = Number($order.textContent); //현재 순서
+                if (order + 1 > number) {
+                    $order.textContent = 1;
+                } else {
+                    $order.textContent = order + 1;
+                }
+
+            } else { // 제시어 있음 또는 입력한 단어가 올바르지 않음 
+                // 올바르지 않다.
+                alert('올바르지 않는 단어입니다.');
+            }
+            $input.value = '';
+            $input.focus();
+        }
+
+        const onInput = (event) => {
+            nextWord = event.target.value; // 입력한 단어를 현재단어로 
+        }
+
+
+        $btn.addEventListener('click', onbtnClick);
+        $input.addEventListener('input', onInput);
+
+    </script>
+</body>
+
+</html>
