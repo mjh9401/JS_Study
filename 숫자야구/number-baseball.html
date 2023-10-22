@@ -15,7 +15,8 @@
         const $input = document.querySelector('#input');
         const $form = document.querySelector('#form');
         const $logs = document.querySelector('#log');
-
+        let out = 0;
+        
         const numbers =[];
         for(let n=1; n<=9; n+=1){
             numbers.push(n);
@@ -45,8 +46,16 @@
 
             return true;
         }
+        
+        function defeated(){
+            const message = document.createTextNode(`패배! 정답은 ${answer.join('')}`);
+            $logs.appendChild(message);
+        }
+
+
         $form.addEventListener('submit',(event)=>{
             event.preventDefault();
+            
             const value = $input.value;
             $input.value = '';
             const valid = checkInput(value);
@@ -56,37 +65,33 @@
                 return;
             }
             if(tries.length >= 9){
-                const message = document.createTextNode(`패배! 정답은 ${answer.join('')}`);
-                $logs.appendChild(message);
+                defeated()
                 return;
             }
-
-            // 몇 스트라이크 및 볼인지 검사
             let strike = 0;
             let ball = 0;
-            // for(let i=0; i < answer.length; i++){
-            //     const index = value.indexOf(answer[i]);
-            //     if(index > -1){ // 일치하는 숫자 발견
-            //         if(index === i){ // 자리수도 같음
-            //             strike += 1;
-            //         }else{ // 숫자만 같음
-            //             ball += 1;
-            //         }
-            //     }
-            // }
+            // 몇 스트라이크 및 볼인지 검사
             answer.forEach((number,aIndex)=>{
                 const index = value.indexOf(number);
                 if(index > -1){ //일치하는 숫자발견
                     if(index === aIndex){ // 자릿수도 같음
                         strike += 1;
-                    } else{ // 숫자만같음
+                    }else{ // 숫자만같음
                         ball += 1;
                     }
                 }
             })
 
-
-            $logs.append(`${value} : ${strike} 스트라이크 ${ball} 볼`,document.createElement('br'));
+            if(strike ==0 && ball ==0){
+                out += 1;
+                $logs.append('아웃',document.createElement('br'));   
+            }else{
+                $logs.append(`${value} : ${strike} 스트라이크 ${ball} 볼`,document.createElement('br')); 
+            } 
+            if(out == 3){
+                defeated()
+                return;
+            }   
             tries.push(value);
         });
 
